@@ -26,3 +26,11 @@ def on_press(key):
     print(random.choice(compliments))
     key_count = 0
     trigger_limit = random.randint(20,50)
+
+def main():
+  with keyboard.Listener(on_press=on_press) as listener:
+    listener.join()
+
+
+if __name__ == "__main__":
+  main()
