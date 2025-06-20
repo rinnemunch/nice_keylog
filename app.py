@@ -13,3 +13,6 @@ compliments = [
     "Respect the hustle.",
     "Typing like a legend."
 ]
+
+key_count = 0
+trigger_limit = random.randint(20,50)
