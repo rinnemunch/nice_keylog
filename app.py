@@ -1,6 +1,7 @@
 import random
 from pynput import keyboard
 from plyer import notification
+import json
 import tkinter as tk
 
 compliments = [
@@ -18,6 +19,16 @@ compliments = [
 
 key_count = 0
 trigger_limit = random.randint(20, 50)
+SETTINGS_FILE = "settings.json"
+
+def apply_settings():
+    selected_value = frequency_slider.get()
+    settings = {
+        "trigger_limit": selected_value
+    }
+    with open(SETTINGS_FILE, "w") as f:
+        json.dump(settings, f, indent=2)
+    print(f"Saved trigger_limit: {selected_value}")
 
 def show_popup(message):
     notification.notify(
