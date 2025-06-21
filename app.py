@@ -1,6 +1,7 @@
 import random
 from pynput import keyboard
 from plyer import notification
+import tkinter as tk
 
 compliments = [
     "Nice job, champ!",
@@ -38,6 +39,31 @@ def on_press(key):
 def main():
     with keyboard.Listener(on_press=on_press) as listener:
         listener.join()
+
+# Main window
+root = tk.Tk()
+root.title("Keylogger Settings")
+root.geometry("300x200")
+
+# Frequency
+label = tk.Label(root, text="Compliment Frequency (keystrokes):")
+label.pack(pady=10)
+
+# Slider
+frequency_slider = tk.Scale(root, from_=10, to=100, orient=tk.HORIZONTAL)
+frequency_slider.set(30)  # Default value
+frequency_slider.pack()
+
+# Apply button
+def apply_settings():
+    selected_value = frequency_slider.get()
+    print("Apply clicked. Frequency:", selected_value)
+
+apply_btn = tk.Button(root, text="Apply", command=apply_settings)
+apply_btn.pack(pady=20)
+
+# Run
+root.mainloop()
 
 if __name__ == "__main__":
     main()
