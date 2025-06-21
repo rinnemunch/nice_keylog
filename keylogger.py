@@ -1,9 +1,8 @@
 import random
+import json
+import os
 from pynput import keyboard
 from plyer import notification
-import json
-import tkinter as tk
-import os
 
 SETTINGS_FILE = "settings.json"
 
@@ -31,25 +30,14 @@ def load_settings():
     else:
         return random.randint(20, 50), "popup"
 
-
 key_count = 0
 trigger_limit, compliment_mode = load_settings()
-
-# JSON
-def apply_settings():
-    selected_value = frequency_slider.get()
-    settings = {
-        "trigger_limit": selected_value
-    }
-    with open(SETTINGS_FILE, "w") as f:
-        json.dump(settings, f, indent=2)
-    print(f"Saved trigger_limit: {selected_value}")
 
 def show_popup(message):
     notification.notify(
         title="Keyboard Compliment",
         message=message,
-        timeout=3  # number of seconds
+        timeout=3
     )
 
 def on_press(key):
@@ -67,53 +55,9 @@ def on_press(key):
         key_count = 0
         trigger_limit, compliment_mode = load_settings()
 
-
 def main():
     with keyboard.Listener(on_press=on_press) as listener:
         listener.join()
-
-# Main window
-root = tk.Tk()
-root.title("Keylogger Settings")
-root.geometry("300x200")
-
-# Frequency
-label = tk.Label(root, text="Compliment Frequency (keystrokes):")
-label.pack(pady=10)
-
-# Slider
-frequency_slider = tk.Scale(root, from_=10, to=100, orient=tk.HORIZONTAL)
-frequency_slider.set(30)  # Default value
-frequency_slider.pack()
-
-# Mode toggle
-mode_var = tk.StringVar(value="popup")  # default
-
-mode_label = tk.Label(root, text="Compliment Mode:")
-mode_label.pack()
-
-mode_options = [("Pop-up", "popup"), ("Terminal", "terminal")]
-for text, value in mode_options:
-    tk.Radiobutton(root, text=text, variable=mode_var, value=value).pack()
-
-# Apply button
-def apply_settings():
-    selected_value = frequency_slider.get()
-    selected_mode = mode_var.get()
-
-    settings = {
-        "trigger_limit": selected_value,
-        "mode": selected_mode
-    }
-
-    with open(SETTINGS_FILE, "w") as f:
-        json.dump(settings, f, indent=2)
-
-    print(f"Saved settings: {settings}")
-
-
-# Run
-root.mainloop()
 
 if __name__ == "__main__":
     main()
