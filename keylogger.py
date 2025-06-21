@@ -52,9 +52,9 @@ def on_press(key):
         if compliment_mode == "popup":
             show_popup(compliment)
         else:
-            f = Figlet(font=random.choice(Figlet().getFonts()))
+            font = 'slant'
+            f = Figlet(font=font)
             print(f.renderText(compliment))
-
         key_count = 0
         trigger_limit, compliment_mode = load_settings()
 
