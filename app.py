@@ -3,6 +3,9 @@ from pynput import keyboard
 from plyer import notification
 import json
 import tkinter as tk
+import os
+
+SETTINGS_FILE = "settings.json"
 
 compliments = [
     "Nice job, champ!",
@@ -17,10 +20,18 @@ compliments = [
     "Typing like a legend."
 ]
 
-key_count = 0
-trigger_limit = random.randint(20, 50)
-SETTINGS_FILE = "settings.json"
+def load_trigger_limit():
+    if os.path.exists(SETTINGS_FILE):
+        with open(SETTINGS_FILE, "r") as f:
+            data = json.load(f)
+            return data.get("trigger_limit", random.randint(20, 50))
+    else:
+        return random.randint(20, 50)
 
+key_count = 0
+trigger_limit = load_trigger_limit()
+
+# JSON
 def apply_settings():
     selected_value = frequency_slider.get()
     settings = {
@@ -45,7 +56,7 @@ def on_press(key):
         compliment = random.choice(compliments)
         show_popup(compliment)
         key_count = 0
-        trigger_limit = random.randint(20, 50)
+        trigger_limit = load_trigger_limit()
 
 def main():
     with keyboard.Listener(on_press=on_press) as listener:
@@ -65,13 +76,31 @@ frequency_slider = tk.Scale(root, from_=10, to=100, orient=tk.HORIZONTAL)
 frequency_slider.set(30)  # Default value
 frequency_slider.pack()
 
+# Mode toggle
+mode_var = tk.StringVar(value="popup")  # default
+
+mode_label = tk.Label(root, text="Compliment Mode:")
+mode_label.pack()
+
+mode_options = [("Pop-up", "popup"), ("Terminal", "terminal")]
+for text, value in mode_options:
+    tk.Radiobutton(root, text=text, variable=mode_var, value=value).pack()
+
 # Apply button
 def apply_settings():
     selected_value = frequency_slider.get()
-    print("Apply clicked. Frequency:", selected_value)
+    selected_mode = mode_var.get()
 
-apply_btn = tk.Button(root, text="Apply", command=apply_settings)
-apply_btn.pack(pady=20)
+    settings = {
+        "trigger_limit": selected_value,
+        "mode": selected_mode
+    }
+
+    with open(SETTINGS_FILE, "w") as f:
+        json.dump(settings, f, indent=2)
+
+    print(f"Saved settings: {settings}")
+
 
 # Run
 root.mainloop()
