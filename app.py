@@ -20,16 +20,20 @@ compliments = [
     "Typing like a legend."
 ]
 
-def load_trigger_limit():
+def load_settings():
     if os.path.exists(SETTINGS_FILE):
         with open(SETTINGS_FILE, "r") as f:
             data = json.load(f)
-            return data.get("trigger_limit", random.randint(20, 50))
+            return (
+                data.get("trigger_limit", random.randint(20, 50)),
+                data.get("mode", "popup")
+            )
     else:
-        return random.randint(20, 50)
+        return random.randint(20, 50), "popup"
+
 
 key_count = 0
-trigger_limit = load_trigger_limit()
+trigger_limit, compliment_mode = load_settings()
 
 # JSON
 def apply_settings():
@@ -49,14 +53,20 @@ def show_popup(message):
     )
 
 def on_press(key):
-    global key_count, trigger_limit
+    global key_count, trigger_limit, compliment_mode
     key_count += 1
 
     if key_count >= trigger_limit:
         compliment = random.choice(compliments)
-        show_popup(compliment)
+
+        if compliment_mode == "popup":
+            show_popup(compliment)
+        else:
+            print(compliment)
+
         key_count = 0
-        trigger_limit = load_trigger_limit()
+        trigger_limit, compliment_mode = load_settings()
+
 
 def main():
     with keyboard.Listener(on_press=on_press) as listener:
