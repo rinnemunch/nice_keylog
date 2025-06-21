@@ -3,6 +3,8 @@ import json
 import os
 from pynput import keyboard
 from plyer import notification
+from pyfiglet import Figlet
+
 
 SETTINGS_FILE = "settings.json"
 
@@ -50,7 +52,8 @@ def on_press(key):
         if compliment_mode == "popup":
             show_popup(compliment)
         else:
-            print(compliment)
+            f = Figlet(font=random.choice(Figlet().getFonts()))
+            print(f.renderText(compliment))
 
         key_count = 0
         trigger_limit, compliment_mode = load_settings()
