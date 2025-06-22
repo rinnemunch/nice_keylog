@@ -47,7 +47,7 @@ def show_popup(message):
     )
 
 def on_press(key):
-    global key_count, trigger_limit, compliment_mode, hacker_mode
+    global key_count, trigger_limit, compliment_mode, hacker_mode, colorful_mode
     key_count += 1
 
     if key_count >= trigger_limit:
