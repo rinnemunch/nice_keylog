@@ -29,15 +29,14 @@ def load_settings():
             return (
                 data.get("trigger_limit", random.randint(20, 50)),
                 data.get("mode", "popup"),
-                data.get("hacker_mode", False)
-)
-
+                data.get("hacker_mode", False),
+                data.get("colorful_mode", False)
+            )
     else:
-        return random.randint(20, 50), "popup"
+        return random.randint(20, 50), "popup", False, False
 
 key_count = 0
-trigger_limit, compliment_mode, hacker_mode = load_settings()
-
+trigger_limit, compliment_mode, hacker_mode, colorful_mode = load_settings()
 
 def show_popup(message):
     notification.notify(
