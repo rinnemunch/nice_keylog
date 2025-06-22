@@ -10,6 +10,7 @@ colors = [Fore.RED, Fore.BLUE, Fore.YELLOW, Fore.CYAN, Fore.MAGENTA, Fore.WHITE]
 import pygetwindow as gw
 
 SETTINGS_FILE = "settings.json"
+ACHIEVEMENTS_FILE = "achievements.json"
 
 compliments = [
     "💪 Nice job, champ!",
@@ -38,8 +39,22 @@ def load_settings():
     else:
         return random.randint(20, 50), "popup", False, False, "All Apps"
 
+def load_achievements():
+    if os.path.exists(ACHIEVEMENTS_FILE):
+        with open(ACHIEVEMENTS_FILE, "r") as f:
+            return json.load(f)
+    else:
+        data = {
+            "Finger Fury": False
+        }
+        with open(ACHIEVEMENTS_FILE, "w") as f:
+            json.dump(data, f, indent=2)
+        return data
+
+
 key_count = 0
 trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app = load_settings()
+achievements = load_achievements()
 
 def show_popup(message):
     notification.notify(

@@ -1,6 +1,7 @@
 {
   "trigger_limit": 30,
   "mode": "terminal",
-  "hacker_mode": false,
-  "colorful_mode": true
+  "hacker_mode": true,
+  "colorful_mode": false,
+  "target_app": "Notepad"
 }
