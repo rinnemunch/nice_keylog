@@ -11,7 +11,8 @@ def apply_settings():
         "trigger_limit": selected_value,
         "mode": selected_mode,
         "hacker_mode": hacker_mode_var.get(),
-        "colorful_mode": colorful_mode_var.get()
+        "colorful_mode": colorful_mode_var.get(),
+        "target_app": app_var.get()
     }
 
     with open(SETTINGS_FILE, "w") as f:
@@ -22,7 +23,7 @@ def apply_settings():
 # GUI
 root = tk.Tk()
 root.title("Keylogger Settings")
-root.geometry("300x300")
+root.geometry("300x360")
 
 # Theme toggle
 hacker_mode_var = tk.BooleanVar(value=False)
@@ -41,6 +42,14 @@ frequency_slider.pack()
 mode_var = tk.StringVar(value="popup")
 mode_label = tk.Label(root, text="Compliment Mode:")
 mode_label.pack()
+
+app_label = tk.Label(root, text="Track In App:")
+app_label.pack(pady=10)
+
+app_var = tk.StringVar(value="All Apps")
+app_choices = ["All Apps", "Notepad", "Visual Studio Code"]
+app_dropdown = tk.OptionMenu(root, app_var, *app_choices)
+app_dropdown.pack()
 
 mode_options = [("Pop-up", "popup"), ("Terminal", "terminal")]
 for text, value in mode_options:
