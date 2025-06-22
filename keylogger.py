@@ -6,6 +6,7 @@ from plyer import notification
 from pyfiglet import Figlet
 from colorama import init, Fore, Style
 init()
+colors = [Fore.RED, Fore.BLUE, Fore.YELLOW, Fore.CYAN, Fore.MAGENTA, Fore.WHITE]
 
 SETTINGS_FILE = "settings.json"
 
@@ -61,11 +62,14 @@ def on_press(key):
 
             if hacker_mode:
                 print(Fore.GREEN + art + Style.RESET_ALL)
+            elif colorful_mode:
+                color = random.choice(colors)
+                print(color + art + Style.RESET_ALL)
             else:
                 print(art)
 
         key_count = 0
-        trigger_limit, compliment_mode, hacker_mode = load_settings()
+        trigger_limit, compliment_mode, hacker_mode, colorful_mode = load_settings()
 
 def main():
     with keyboard.Listener(on_press=on_press) as listener:
