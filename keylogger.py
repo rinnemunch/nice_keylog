@@ -11,6 +11,7 @@ import pygetwindow as gw
 
 SETTINGS_FILE = "settings.json"
 ACHIEVEMENTS_FILE = "achievements.json"
+STATS_FILE = "stats.json"
 
 compliments = [
     "💪 Nice job, champ!",
@@ -51,10 +52,22 @@ def load_achievements():
             json.dump(data, f, indent=2)
         return data
 
+def load_stats():
+    if os.path.exists(STATS_FILE):
+        with open(STATS_FILE, "r") as f:
+            return json.load(f)
+    else:
+        data = {
+            "total_keys": 0
+        }
+        with open(STATS_FILE, "w") as f:
+            json.dump(data, f, indent=2)
+        return data
 
 key_count = 0
 trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app = load_settings()
 achievements = load_achievements()
+stats = load_stats()
 
 def show_popup(message):
     notification.notify(
@@ -76,6 +89,10 @@ def on_press(key):
             return
 
     key_count += 1
+
+    stats["total_keys"] += 1
+    with open(STATS_FILE, "w") as f:
+        json.dump(stats, f, indent=2)
 
     if key_count >= trigger_limit:
         compliment = random.choice(compliments)
