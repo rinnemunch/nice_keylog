@@ -7,6 +7,7 @@ from pyfiglet import Figlet
 from colorama import init, Fore, Style
 init()
 colors = [Fore.RED, Fore.BLUE, Fore.YELLOW, Fore.CYAN, Fore.MAGENTA, Fore.WHITE]
+import pygetwindow as gw
 
 SETTINGS_FILE = "settings.json"
 
@@ -31,13 +32,14 @@ def load_settings():
                 data.get("trigger_limit", random.randint(20, 50)),
                 data.get("mode", "popup"),
                 data.get("hacker_mode", False),
-                data.get("colorful_mode", False)
+                data.get("colorful_mode", False),
+                data.get("target_app", "All Apps")
             )
     else:
-        return random.randint(20, 50), "popup", False, False
+        return random.randint(20, 50), "popup", False, False, "All Apps"
 
 key_count = 0
-trigger_limit, compliment_mode, hacker_mode, colorful_mode = load_settings()
+trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app = load_settings()
 
 def show_popup(message):
     notification.notify(
@@ -47,7 +49,17 @@ def show_popup(message):
     )
 
 def on_press(key):
-    global key_count, trigger_limit, compliment_mode, hacker_mode, colorful_mode
+    global key_count, trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app
+
+    try:
+        active_title = gw.getActiveWindowTitle()
+    except:
+        active_title = None
+
+    if target_app != "All Apps":
+        if not active_title or target_app.lower() not in active_title.lower():
+            return
+
     key_count += 1
 
     if key_count >= trigger_limit:
@@ -69,7 +81,8 @@ def on_press(key):
                 print(art)
 
         key_count = 0
-        trigger_limit, compliment_mode, hacker_mode, colorful_mode = load_settings()
+        trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app = load_settings()
+
 
 def main():
     with keyboard.Listener(on_press=on_press) as listener:
