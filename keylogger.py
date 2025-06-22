@@ -52,6 +52,18 @@ def load_achievements():
             json.dump(data, f, indent=2)
         return data
 
+def unlock_achievement(name):
+    if not achievements.get(name):
+        achievements[name] = True
+        with open(ACHIEVEMENTS_FILE, "w") as f:
+            json.dump(achievements, f, indent=2)
+
+        message = f"🏆 Achievement Unlocked: {name}"
+        if compliment_mode == "popup":
+            show_popup(message)
+        else:
+            print(Fore.YELLOW + message + Style.RESET_ALL)
+
 def load_stats():
     if os.path.exists(STATS_FILE):
         with open(STATS_FILE, "r") as f:
@@ -93,6 +105,10 @@ def on_press(key):
     stats["total_keys"] += 1
     with open(STATS_FILE, "w") as f:
         json.dump(stats, f, indent=2)
+
+    if stats["total_keys"] == 20:
+        # print("🎯 Reached 20 total keys!") testing
+        unlock_achievement("Finger Fury")
 
     if key_count >= trigger_limit:
         compliment = random.choice(compliments)
