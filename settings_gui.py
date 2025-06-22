@@ -10,7 +10,8 @@ def apply_settings():
     settings = {
         "trigger_limit": selected_value,
         "mode": selected_mode,
-        "hacker_mode": hacker_mode_var.get()
+        "hacker_mode": hacker_mode_var.get(),
+        "colorful_mode": colorful_mode_var.get()
     }
 
     with open(SETTINGS_FILE, "w") as f:
@@ -21,11 +22,14 @@ def apply_settings():
 # GUI
 root = tk.Tk()
 root.title("Keylogger Settings")
-root.geometry("300x250")
+root.geometry("300x300")
 
 # Theme toggle
 hacker_mode_var = tk.BooleanVar(value=False)
 tk.Checkbutton(root, text="Enable Hacker Mode", variable=hacker_mode_var).pack()
+
+colorful_mode_var = tk.BooleanVar(value=False)
+tk.Checkbutton(root, text="Enable Colorful Mode", variable=colorful_mode_var).pack()
 
 label = tk.Label(root, text="Compliment Frequency (keystrokes):")
 label.pack(pady=10)
