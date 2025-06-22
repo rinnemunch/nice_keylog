@@ -4,7 +4,8 @@ import os
 from pynput import keyboard
 from plyer import notification
 from pyfiglet import Figlet
-
+from colorama import init, Fore, Style
+init()
 
 SETTINGS_FILE = "settings.json"
 
@@ -27,13 +28,16 @@ def load_settings():
             data = json.load(f)
             return (
                 data.get("trigger_limit", random.randint(20, 50)),
-                data.get("mode", "popup")
-            )
+                data.get("mode", "popup"),
+                data.get("hacker_mode", False)
+)
+
     else:
         return random.randint(20, 50), "popup"
 
 key_count = 0
-trigger_limit, compliment_mode = load_settings()
+trigger_limit, compliment_mode, hacker_mode = load_settings()
+
 
 def show_popup(message):
     notification.notify(
@@ -43,7 +47,7 @@ def show_popup(message):
     )
 
 def on_press(key):
-    global key_count, trigger_limit, compliment_mode
+    global key_count, trigger_limit, compliment_mode, hacker_mode
     key_count += 1
 
     if key_count >= trigger_limit:
@@ -54,9 +58,15 @@ def on_press(key):
         else:
             font = 'slant'
             f = Figlet(font=font)
-            print(f.renderText(compliment))
+            art = f.renderText(compliment)
+
+            if hacker_mode:
+                print(Fore.GREEN + art + Style.RESET_ALL)
+            else:
+                print(art)
+
         key_count = 0
-        trigger_limit, compliment_mode = load_settings()
+        trigger_limit, compliment_mode, hacker_mode = load_settings()
 
 def main():
     with keyboard.Listener(on_press=on_press) as listener:

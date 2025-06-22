@@ -1,4 +1,5 @@
 {
   "trigger_limit": 30,
-  "mode": "terminal"
+  "mode": "terminal",
+  "hacker_mode": true
 }
