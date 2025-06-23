@@ -35,10 +35,11 @@ def load_settings():
                 data.get("mode", "popup"),
                 data.get("hacker_mode", False),
                 data.get("colorful_mode", False),
-                data.get("target_app", "All Apps")
+                data.get("target_app", "All Apps"),
+                data.get("self_roast_mode", False)
             )
     else:
-        return random.randint(20, 50), "popup", False, False, "All Apps"
+        return random.randint(20, 50), "popup", False, False, "All Apps", False
 
 def load_achievements():
     if os.path.exists(ACHIEVEMENTS_FILE):
@@ -84,7 +85,7 @@ def on_release(key):
 
 key_count = 0
 compliments_paused = False
-trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app = load_settings()
+trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, self_roast_mode = load_settings()
 achievements = load_achievements()
 stats = load_stats()
 pressed_keys = set()
@@ -156,8 +157,7 @@ def on_press(key):
 
 
         key_count = 0
-        trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app = load_settings()
-
+        trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, self_roast_mode = load_settings()
 
 def main():
     with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
