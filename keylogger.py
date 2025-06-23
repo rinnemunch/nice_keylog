@@ -106,8 +106,8 @@ def on_press(key):
     with open(STATS_FILE, "w") as f:
         json.dump(stats, f, indent=2)
 
-    if stats["total_keys"] == 20:
-        # print("🎯 Reached 20 total keys!") testing
+    if stats["total_keys"] == 1000:
+        # print("🎯 Reached 20 total keys!")
         unlock_achievement("Finger Fury")
 
     if key_count >= trigger_limit:
