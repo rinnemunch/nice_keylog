@@ -76,10 +76,18 @@ def load_stats():
             json.dump(data, f, indent=2)
         return data
 
+def on_release(key):
+    if key in [keyboard.Key.ctrl, keyboard.Key.ctrl_l, keyboard.Key.ctrl_r]:
+        pressed_keys.discard("ctrl")
+    elif key in [keyboard.Key.shift, keyboard.Key.shift_l, keyboard.Key.shift_r]:
+        pressed_keys.discard("shift")
+
 key_count = 0
+compliments_paused = False
 trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app = load_settings()
 achievements = load_achievements()
 stats = load_stats()
+pressed_keys = set()
 
 def show_popup(message):
     notification.notify(
@@ -89,7 +97,25 @@ def show_popup(message):
     )
 
 def on_press(key):
-    global key_count, trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app
+    global key_count, trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, compliments_paused
+
+    if key in [keyboard.Key.ctrl, keyboard.Key.ctrl_l, keyboard.Key.ctrl_r]:
+      pressed_keys.add("ctrl")
+    if key in [keyboard.Key.shift, keyboard.Key.shift_l, keyboard.Key.shift_r]:
+      pressed_keys.add("shift")
+
+    print(f"[KEY PRESSED] {key}")
+    print(f"[MODS] {pressed_keys}")
+
+    # Ctrl + Shift + P to pause
+    if (
+        hasattr(key, 'char') and key.char == '\x10' and
+        "shift" in pressed_keys
+    ):
+        compliments_paused = not compliments_paused
+        state = "paused" if compliments_paused else "resumed"
+        print(Fore.CYAN + f"⏸️ Compliments {state}." + Style.RESET_ALL)
+        return
 
     try:
         active_title = gw.getActiveWindowTitle()
@@ -133,7 +159,7 @@ def on_press(key):
 
 
 def main():
-    with keyboard.Listener(on_press=on_press) as listener:
+    with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
         listener.join()
 
 if __name__ == "__main__":
