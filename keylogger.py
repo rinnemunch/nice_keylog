@@ -26,6 +26,19 @@ compliments = [
     "🏆 Typing like a legend."
 ]
 
+roasts = [
+    "💩 Wow, you call that typing?",
+    "🫠 I've seen toddlers type faster.",
+    "🙃 Is that a typo or your best work?",
+    "🐌 Even snails are passing you.",
+    "😬 Might wanna reboot your brain.",
+    "📉 Productivity just took a nosedive.",
+    "🤡 You type like it’s your first day.",
+    "⏳ Any slower and we’d time travel.",
+    "🛑 Please stop. You're embarrassing us.",
+    "🔥 This keyboard deserves better."
+]
+
 def load_settings():
     if os.path.exists(SETTINGS_FILE):
         with open(SETTINGS_FILE, "r") as f:
