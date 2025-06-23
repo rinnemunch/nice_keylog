@@ -104,8 +104,8 @@ def on_press(key):
     if key in [keyboard.Key.shift, keyboard.Key.shift_l, keyboard.Key.shift_r]:
       pressed_keys.add("shift")
 
-    print(f"[KEY PRESSED] {key}")
-    print(f"[MODS] {pressed_keys}")
+    # print(f"[KEY PRESSED] {key}")
+    # print(f"[MODS] {pressed_keys}")
 
     # Ctrl + Shift + P to pause
     if (
@@ -136,7 +136,7 @@ def on_press(key):
         # print("🎯 Reached 20 total keys!")
         unlock_achievement("Finger Fury")
 
-    if key_count >= trigger_limit:
+    if key_count >= trigger_limit and not compliments_paused:
         compliment = random.choice(compliments)
 
         if compliment_mode == "popup":
@@ -153,6 +153,7 @@ def on_press(key):
                 print(color + art + Style.RESET_ALL)
             else:
                 print(art)
+
 
         key_count = 0
         trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app = load_settings()
