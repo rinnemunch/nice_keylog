@@ -3,5 +3,6 @@
   "mode": "terminal",
   "hacker_mode": true,
   "colorful_mode": false,
-  "target_app": "Notepad"
+  "target_app": "Notepad",
+  "self_roast_mode": true
 }

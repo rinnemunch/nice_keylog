@@ -12,7 +12,8 @@ def apply_settings():
         "mode": selected_mode,
         "hacker_mode": hacker_mode_var.get(),
         "colorful_mode": colorful_mode_var.get(),
-        "target_app": app_var.get()
+        "target_app": app_var.get(),
+        "self_roast_mode": self_roast_var.get()
     }
 
     with open(SETTINGS_FILE, "w") as f:
@@ -23,7 +24,7 @@ def apply_settings():
 # GUI
 root = tk.Tk()
 root.title("Keylogger Settings")
-root.geometry("300x360")
+root.geometry("300x390")
 
 # Theme toggle
 hacker_mode_var = tk.BooleanVar(value=False)
@@ -31,6 +32,9 @@ tk.Checkbutton(root, text="Enable Hacker Mode", variable=hacker_mode_var).pack()
 
 colorful_mode_var = tk.BooleanVar(value=False)
 tk.Checkbutton(root, text="Enable Colorful Mode", variable=colorful_mode_var).pack()
+
+self_roast_var = tk.BooleanVar(value=False)
+tk.Checkbutton(root, text="Enable Self-Roast Mode", variable=self_roast_var).pack()
 
 label = tk.Label(root, text="Compliment Frequency (keystrokes):")
 label.pack(pady=10)
