@@ -111,7 +111,7 @@ def show_popup(message):
     )
 
 def on_press(key):
-    global key_count, trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, compliments_paused
+    global key_count, trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, compliments_paused, self_roast_mode
 
     if key in [keyboard.Key.ctrl, keyboard.Key.ctrl_l, keyboard.Key.ctrl_r]:
       pressed_keys.add("ctrl")
@@ -151,7 +151,7 @@ def on_press(key):
         unlock_achievement("Finger Fury")
 
     if key_count >= trigger_limit and not compliments_paused:
-        compliment = random.choice(compliments)
+        compliment = random.choice(roasts if self_roast_mode else compliments)
 
         if compliment_mode == "popup":
             show_popup(compliment)
