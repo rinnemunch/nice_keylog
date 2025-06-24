@@ -53,21 +53,27 @@ def play_sound():
         print(Fore.RED + f"[Sound Error] {e}" + Style.RESET_ALL)
 
 
-def animate_text(text, delay=0.02, color=Fore.WHITE):
-    for char in text:
-        sys.stdout.write(color + char)
-        sys.stdout.flush()
+def animate_text(text, delay=0.05, color=Fore.CYAN):
+    lines = text.splitlines()
+    for i in range(1, len(lines) + 1):
+        print(color + "\n".join(lines[:i]) + Style.RESET_ALL)
         time.sleep(delay)
+
+def animate_sparkle_text(text, delay=0.05, base_color=Fore.CYAN):
+    sparkle = ['✨', '★', '*', '•']
+    for line in text.splitlines():
+        shine = random.choice(sparkle)
+        print(base_color + line + " " + shine + Style.RESET_ALL)
+        time.sleep(delay)
+
     print(Style.RESET_ALL)
 
-def animate_sparkle_text(text, delay=0.02, base_color=Fore.CYAN):
-    sparkle = ['✨', '★', '*', '•']
-    for char in text:
-        shine = random.choice(sparkle)
-        sys.stdout.write(base_color + char + random.choice([shine, '']))
-        sys.stdout.flush()
+def animate_figlet(text, delay=0.03, color=Fore.CYAN):
+    f = Figlet(font='slant')
+    lines = f.renderText(text).splitlines()
+    for line in lines:
+        print(color + line + Style.RESET_ALL)
         time.sleep(delay)
-    print(Style.RESET_ALL)
 
 def load_settings():
     if os.path.exists(SETTINGS_FILE):
@@ -257,20 +263,11 @@ def on_press(key):
         if compliment_mode == "popup":
             show_popup(compliment)
         else:
-            font = 'slant'
-            f = Figlet(font=font)
-            art = f.renderText(compliment)
-
-            if hacker_mode:
-                print(Fore.GREEN + art + Style.RESET_ALL)
-            elif colorful_mode:
-                color = random.choice(colors)
-                print(color + art + Style.RESET_ALL)
-            else:
-                if self_roast_mode:
-                    animate_text(art, delay=0.0015, color=Fore.RED)
-                else:
-                    animate_text(art, delay=0.001, color=Fore.CYAN)
+            animate_figlet(
+                compliment,
+                delay=0.05,
+                color=random.choice(colors)
+            )
 
         key_count = 0
         # trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, self_roast_mode, time_mode = load_settings()
