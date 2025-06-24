@@ -231,6 +231,8 @@ def on_press(key):
             compliment += f"\n{get_time_based_compliment(self_roast_mode)}"
             print(Fore.MAGENTA + "[🕒 Time-based compliment triggered]" + Style.RESET_ALL)
 
+        play_sound()
+
         if compliment_mode == "popup":
             show_popup(compliment)
         else:
