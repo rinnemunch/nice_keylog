@@ -60,6 +60,15 @@ def animate_text(text, delay=0.02, color=Fore.WHITE):
         time.sleep(delay)
     print(Style.RESET_ALL)
 
+def animate_sparkle_text(text, delay=0.02, base_color=Fore.CYAN):
+    sparkle = ['✨', '★', '*', '•']
+    for char in text:
+        shine = random.choice(sparkle)
+        sys.stdout.write(base_color + char + random.choice([shine, '']))
+        sys.stdout.flush()
+        time.sleep(delay)
+    print(Style.RESET_ALL)
+
 def load_settings():
     if os.path.exists(SETTINGS_FILE):
         with open(SETTINGS_FILE, "r") as f:
@@ -258,7 +267,10 @@ def on_press(key):
                 color = random.choice(colors)
                 print(color + art + Style.RESET_ALL)
             else:
-                animate_text(art, delay=0.001, color=Fore.CYAN)
+                if self_roast_mode:
+                    animate_text(art, delay=0.0015, color=Fore.RED)
+                else:
+                    animate_text(art, delay=0.001, color=Fore.CYAN)
 
         key_count = 0
         # trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, self_roast_mode, time_mode = load_settings()
