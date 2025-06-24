@@ -187,7 +187,9 @@ def on_press(key):
         unlock_achievement("Finger Fury")
 
     if key_count >= trigger_limit and not compliments_paused:
-        compliment = random.choice(roasts if self_roast_mode else compliments)
+        if time_mode and random.random() < 0.5:
+            compliment += f"\n{get_time_based_compliment(self_roast_mode)}"
+
 
         if compliment_mode == "popup":
             show_popup(compliment)
