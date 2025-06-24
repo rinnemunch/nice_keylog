@@ -118,14 +118,13 @@ def unlock_achievement(name):
 def load_stats():
     if os.path.exists(STATS_FILE):
         with open(STATS_FILE, "r") as f:
-            return json.load(f)
+            data = json.load(f)
     else:
-        data = {
-            "total_keys": 0
-        }
-        with open(STATS_FILE, "w") as f:
-            json.dump(data, f, indent=2)
-        return data
+        data = {}
+
+    data.setdefault("total_keys", 0)
+    data.setdefault("streak", 0)
+    return data
 
 def load_daily_stats():
     today = datetime.now().strftime("%Y-%m-%d")
@@ -236,6 +235,13 @@ def on_press(key):
         if not active_title or target_app.lower() not in active_title.lower():
             return
 
+    if compliments_paused or (target_app != "All Apps" and (not active_title or target_app.lower() not in active_title.lower())):
+        if stats["streak"] > 0:
+            print(Fore.RED + f"💤 Streak broken at {stats['streak']}!" + Style.RESET_ALL)
+            stats["streak"] = 0
+            with open(STATS_FILE, "w") as f:
+                json.dump(stats, f, indent=2)
+
     key_count += 1
     print(f"[KEY COUNT] {key_count} / {trigger_limit}")
 
@@ -251,7 +257,16 @@ def on_press(key):
         # print("🎯 Reached 20 total keys!")
         unlock_achievement("Finger Fury")
 
+    with open(STATS_FILE, "w") as f:
+        json.dump(stats, f, indent=2)
+
     if key_count >= trigger_limit and not compliments_paused:
+        stats["streak"] += 1
+        print(Fore.YELLOW + f"🔥 Streak: {stats['streak']} compliments in a row!" + Style.RESET_ALL)
+
+        if stats["streak"] == 5:
+            unlock_achievement("Compliment Combo")
+
         compliment = random.choice(roasts if self_roast_mode else compliments)
 
         if time_mode and random.random() < 0.5:
