@@ -147,7 +147,7 @@ def get_time_based_compliment(roast_mode=False):
             return "🌙 Late night legend at work."
 
 def on_press(key):
-    global key_count, trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, compliments_paused, self_roast_mode
+    global key_count, trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, compliments_paused, self_roast_mode, time_mode
 
     if key in [keyboard.Key.ctrl, keyboard.Key.ctrl_l, keyboard.Key.ctrl_r]:
       pressed_keys.add("ctrl")
@@ -187,9 +187,11 @@ def on_press(key):
         unlock_achievement("Finger Fury")
 
     if key_count >= trigger_limit and not compliments_paused:
+        compliment = random.choice(roasts if self_roast_mode else compliments)
+
         if time_mode and random.random() < 0.5:
             compliment += f"\n{get_time_based_compliment(self_roast_mode)}"
-
+            print(Fore.MAGENTA + "[🕒 Time-based compliment triggered]" + Style.RESET_ALL)
 
         if compliment_mode == "popup":
             show_popup(compliment)
