@@ -8,6 +8,7 @@ from colorama import init, Fore, Style
 init()
 colors = [Fore.RED, Fore.BLUE, Fore.YELLOW, Fore.CYAN, Fore.MAGENTA, Fore.WHITE]
 import pygetwindow as gw
+from datetime import datetime
 
 SETTINGS_FILE = "settings.json"
 ACHIEVEMENTS_FILE = "achievements.json"
@@ -110,6 +111,40 @@ def show_popup(message):
         message=message,
         timeout=3
     )
+
+def get_time_based_compliment(roast_mode=False):
+    hour = datetime.now().hour
+
+    if roast_mode:
+        if 0 <= hour < 3:
+            return "🦉 Even the bugs are asleep. What’s your excuse?"
+        elif 3 <= hour < 6:
+            return "💀 This code’s haunting the night... and not in a good way."
+        elif 6 <= hour < 9:
+            return "☕ Hope that coffee fixes your spaghetti logic."
+        elif 9 <= hour < 12:
+            return "📉 Morning errors already? Impressive."
+        elif 12 <= hour < 17:
+            return "💼 Peak hours, yet here we are debugging nonsense."
+        elif 17 <= hour < 21:
+            return "🌇 That sunset won’t clean your code."
+        else:
+            return "🌙 Night mode engaged... unfortunately, so is your typos."
+    else:
+        if 0 <= hour < 3:
+            return "🦇 Night owl mode: Grind god."
+        elif 3 <= hour < 6:
+            return "🌌 Coding through the void... respect."
+        elif 6 <= hour < 9:
+            return "🌅 Early bird getting those keys."
+        elif 9 <= hour < 12:
+            return "☕ Morning flow. You’re dialed in."
+        elif 12 <= hour < 17:
+            return "💼 Prime productivity hours. Keep it up!"
+        elif 17 <= hour < 21:
+            return "🌇 Evening warrior mode activated."
+        else:
+            return "🌙 Late night legend at work."
 
 def on_press(key):
     global key_count, trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, compliments_paused, self_roast_mode
