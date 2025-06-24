@@ -1,8 +1,8 @@
 {
   "trigger_limit": 30,
-  "mode": "terminal",
+  "mode": "popup",
   "hacker_mode": false,
-  "colorful_mode": true,
+  "colorful_mode": false,
   "target_app": "Notepad",
   "self_roast_mode": true
 }
