@@ -198,6 +198,10 @@ def on_press(key):
     with open(STATS_FILE, "w") as f:
         json.dump(stats, f, indent=2)
 
+    daily_stats[current_date] += 1
+    with open(DAILY_STATS_FILE, "w") as f:
+        json.dump(daily_stats, f, indent=2)
+
     if stats["total_keys"] == 1000:
         # print("🎯 Reached 20 total keys!")
         unlock_achievement("Finger Fury")
