@@ -4,5 +4,5 @@
   "hacker_mode": false,
   "colorful_mode": false,
   "target_app": "Notepad",
-  "self_roast_mode": true
+  "self_roast_mode": false
 }

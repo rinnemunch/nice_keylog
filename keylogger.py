@@ -235,13 +235,6 @@ def on_press(key):
         if not active_title or target_app.lower() not in active_title.lower():
             return
 
-    if compliments_paused or (target_app != "All Apps" and (not active_title or target_app.lower() not in active_title.lower())):
-        if stats["streak"] > 0:
-            print(Fore.RED + f"💤 Streak broken at {stats['streak']}!" + Style.RESET_ALL)
-            stats["streak"] = 0
-            with open(STATS_FILE, "w") as f:
-                json.dump(stats, f, indent=2)
-
     key_count += 1
     print(f"[KEY COUNT] {key_count} / {trigger_limit}")
 
@@ -260,9 +253,18 @@ def on_press(key):
     with open(STATS_FILE, "w") as f:
         json.dump(stats, f, indent=2)
 
-    if key_count >= trigger_limit and not compliments_paused:
+    if key_count >= trigger_limit:
+        if compliments_paused or (target_app != "All Apps" and (not active_title or target_app.lower() not in active_title.lower())):
+            if stats["streak"] > 0:
+                print(Fore.RED + f"💤 Streak broken at {stats['streak']}!" + Style.RESET_ALL)
+                stats["streak"] = 0
+                with open(STATS_FILE, "w") as f:
+                    json.dump(stats, f, indent=2)
+            key_count = 0
+            return
+
         stats["streak"] += 1
-        print(Fore.YELLOW + f"🔥 Streak: {stats['streak']} compliments in a row!" + Style.RESET_ALL)
+        print(Fore.GREEN + f"🔥 Streak: {stats['streak']}" + Style.RESET_ALL)
 
         if stats["streak"] == 5:
             unlock_achievement("Compliment Combo")
