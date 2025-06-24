@@ -9,6 +9,7 @@ init()
 colors = [Fore.RED, Fore.BLUE, Fore.YELLOW, Fore.CYAN, Fore.MAGENTA, Fore.WHITE]
 import pygetwindow as gw
 from datetime import datetime
+import simpleaudio as sa
 
 SETTINGS_FILE = "settings.json"
 ACHIEVEMENTS_FILE = "achievements.json"
@@ -40,6 +41,13 @@ roasts = [
     "🛑 Please stop. You're embarrassing us.",
     "🔥 This keyboard deserves better."
 ]
+
+def play_sound():
+    try:
+        wave_obj = sa.WaveObject.from_wave_file("chime.wav")
+        wave_obj.play()
+    except Exception as e:
+        print(Fore.RED + f"[Sound Error] {e}" + Style.RESET_ALL)
 
 def load_settings():
     if os.path.exists(SETTINGS_FILE):
