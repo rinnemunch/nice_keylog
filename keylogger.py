@@ -163,7 +163,17 @@ def get_time_based_compliment(roast_mode=False):
             return "🌙 Late night legend at work."
 
 def on_press(key):
-    global key_count, trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, compliments_paused, self_roast_mode, time_mode
+    global key_count, trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, compliments_paused, self_roast_mode, time_mode, current_date
+
+    new_date = datetime.now().strftime("%Y-%m-%d")
+    if new_date != current_date:
+        print(Fore.CYAN + f"📊 {current_date} Summary: {daily_stats[current_date]} keys pressed." + Style.RESET_ALL)
+
+        daily_stats[new_date] = 0
+        with open(DAILY_STATS_FILE, "w") as f:
+            json.dump(daily_stats, f, indent=2)
+
+        current_date = new_date
 
     if key in [keyboard.Key.ctrl, keyboard.Key.ctrl_l, keyboard.Key.ctrl_r]:
       pressed_keys.add("ctrl")
