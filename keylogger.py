@@ -13,6 +13,7 @@ from datetime import datetime
 SETTINGS_FILE = "settings.json"
 ACHIEVEMENTS_FILE = "achievements.json"
 STATS_FILE = "stats.json"
+DAILY_STATS_FILE = "daily_stats.json"
 
 compliments = [
     "💪 Nice job, champ!",
@@ -92,6 +93,20 @@ def load_stats():
             json.dump(data, f, indent=2)
         return data
 
+def load_daily_stats():
+    today = datetime.now().strftime("%Y-%m-%d")
+
+    if os.path.exists(DAILY_STATS_FILE):
+        with open(DAILY_STATS_FILE, "r") as f:
+            data = json.load(f)
+    else:
+        data = {}
+
+    if today not in data:
+        data[today] = 0
+
+    return data, today
+
 def on_release(key):
     if key in [keyboard.Key.ctrl, keyboard.Key.ctrl_l, keyboard.Key.ctrl_r]:
         pressed_keys.discard("ctrl")
@@ -103,6 +118,7 @@ compliments_paused = False
 trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, self_roast_mode, time_mode = load_settings()
 achievements = load_achievements()
 stats = load_stats()
+daily_stats, current_date = load_daily_stats()
 pressed_keys = set()
 
 def show_popup(message):
@@ -164,8 +180,8 @@ def on_press(key):
     ):
         compliments_paused = not compliments_paused
         state = "paused" if compliments_paused else "resumed"
-        print(Fore.CYAN + f"⏸️ Compliments {state}." + Style.RESET_ALL)
-        return
+        # print(Fore.CYAN + f"⏸️ Compliments {state}." + Style.RESET_ALL)
+        # return
 
     try:
         active_title = gw.getActiveWindowTitle()
