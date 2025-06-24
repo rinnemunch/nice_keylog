@@ -10,6 +10,8 @@ colors = [Fore.RED, Fore.BLUE, Fore.YELLOW, Fore.CYAN, Fore.MAGENTA, Fore.WHITE]
 import pygetwindow as gw
 from datetime import datetime
 import pygame
+import time
+import sys
 
 SETTINGS_FILE = "settings.json"
 ACHIEVEMENTS_FILE = "achievements.json"
@@ -49,6 +51,14 @@ def play_sound():
         pygame.mixer.Sound("chime.wav").play()
     except Exception as e:
         print(Fore.RED + f"[Sound Error] {e}" + Style.RESET_ALL)
+
+
+def animate_text(text, delay=0.02, color=Fore.WHITE):
+    for char in text:
+        sys.stdout.write(color + char)
+        sys.stdout.flush()
+        time.sleep(delay)
+    print(Style.RESET_ALL)
 
 def load_settings():
     if os.path.exists(SETTINGS_FILE):
@@ -248,8 +258,7 @@ def on_press(key):
                 color = random.choice(colors)
                 print(color + art + Style.RESET_ALL)
             else:
-                print(art)
-
+                animate_text(art, delay=0.001, color=Fore.CYAN)
 
         key_count = 0
         # trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, self_roast_mode, time_mode = load_settings()
