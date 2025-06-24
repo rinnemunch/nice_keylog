@@ -9,8 +9,7 @@ init()
 colors = [Fore.RED, Fore.BLUE, Fore.YELLOW, Fore.CYAN, Fore.MAGENTA, Fore.WHITE]
 import pygetwindow as gw
 from datetime import datetime
-import simpleaudio as sa
-import threading
+import pygame
 
 SETTINGS_FILE = "settings.json"
 ACHIEVEMENTS_FILE = "achievements.json"
@@ -43,17 +42,13 @@ roasts = [
     "🔥 This keyboard deserves better."
 ]
 
-active_sounds = []
+pygame.mixer.init()
 
 def play_sound():
-    def _play():
-        try:
-            wave_obj = sa.WaveObject.from_wave_file("chime.wav")
-            wave_obj.play()
-        except Exception as e:
-            print(Fore.RED + f"[Sound Error] {e}" + Style.RESET_ALL)
-
-    threading.Thread(target=_play, daemon=True).start()
+    try:
+        pygame.mixer.Sound("chime.wav").play()
+    except Exception as e:
+        print(Fore.RED + f"[Sound Error] {e}" + Style.RESET_ALL)
 
 def load_settings():
     if os.path.exists(SETTINGS_FILE):
