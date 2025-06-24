@@ -10,6 +10,7 @@ colors = [Fore.RED, Fore.BLUE, Fore.YELLOW, Fore.CYAN, Fore.MAGENTA, Fore.WHITE]
 import pygetwindow as gw
 from datetime import datetime
 import simpleaudio as sa
+import threading
 
 SETTINGS_FILE = "settings.json"
 ACHIEVEMENTS_FILE = "achievements.json"
@@ -42,12 +43,17 @@ roasts = [
     "🔥 This keyboard deserves better."
 ]
 
+active_sounds = []
+
 def play_sound():
-    try:
-        wave_obj = sa.WaveObject.from_wave_file("chime.wav")
-        wave_obj.play()
-    except Exception as e:
-        print(Fore.RED + f"[Sound Error] {e}" + Style.RESET_ALL)
+    def _play():
+        try:
+            wave_obj = sa.WaveObject.from_wave_file("chime.wav")
+            wave_obj.play()
+        except Exception as e:
+            print(Fore.RED + f"[Sound Error] {e}" + Style.RESET_ALL)
+
+    threading.Thread(target=_play, daemon=True).start()
 
 def load_settings():
     if os.path.exists(SETTINGS_FILE):
@@ -211,6 +217,7 @@ def on_press(key):
             return
 
     key_count += 1
+    print(f"[KEY COUNT] {key_count} / {trigger_limit}")
 
     stats["total_keys"] += 1
     with open(STATS_FILE, "w") as f:
@@ -250,7 +257,7 @@ def on_press(key):
 
 
         key_count = 0
-        trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, self_roast_mode, time_mode = load_settings()
+        # trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, self_roast_mode, time_mode = load_settings()
 
 def main():
     with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
