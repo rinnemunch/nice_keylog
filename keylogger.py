@@ -193,6 +193,14 @@ pressed_keys = set()
 current_word = ""
 word_stats = {}
 
+if use_custom_compliments and os.path.exists(custom_compliment_file):
+    with open(custom_compliment_file, "r", encoding="utf-8") as f:
+        compliments = [line.strip() for line in f if line.strip()]
+    print(f"[INFO] Loaded {len(compliments)} custom compliments.")
+else:
+    print("[INFO] Using default compliments.")
+
+
 if os.path.exists(WORD_STATS_FILE):
     with open(WORD_STATS_FILE, "r") as f:
         word_stats = json.load(f)
