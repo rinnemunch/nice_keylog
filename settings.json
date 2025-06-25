@@ -4,5 +4,7 @@
   "hacker_mode": false,
   "colorful_mode": false,
   "target_app": "Notepad",
-  "self_roast_mode": false
+  "self_roast_mode": false,
+  "use_custom_compliments": true,
+  "custom_compliment_file": "custom_compliments.txt"
 }
