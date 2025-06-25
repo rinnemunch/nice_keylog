@@ -17,6 +17,7 @@ SETTINGS_FILE = "settings.json"
 ACHIEVEMENTS_FILE = "achievements.json"
 STATS_FILE = "stats.json"
 DAILY_STATS_FILE = "daily_stats.json"
+WORD_STATS_FILE = "top_words.json"
 
 compliments = [
     "💪 Nice job, champ!",
@@ -154,6 +155,13 @@ stats = load_stats()
 daily_stats, current_date = load_daily_stats()
 pressed_keys = set()
 
+current_word = ""
+word_stats = {}
+
+if os.path.exists(WORD_STATS_FILE):
+    with open(WORD_STATS_FILE, "r") as f:
+        word_stats = json.load(f)
+
 def show_popup(message):
     notification.notify(
         title="Keyboard Compliment",
@@ -236,7 +244,20 @@ def on_press(key):
             return
 
     key_count += 1
-    print(f"[KEY COUNT] {key_count} / {trigger_limit}")
+
+    try:
+        if hasattr(key, 'char') and key.char.isalnum():
+            current_word += key.char.lower()
+        elif key == keyboard.Key.space or key == keyboard.Key.enter:
+            if 2 < len(current_word) < 20 and current_word not in ["the", "and", "for"]:
+                word_stats[current_word] = word_stats.get(current_word, 0) + 1
+                with open(WORD_STATS_FILE, "w") as f:
+                    json.dump(word_stats, f, indent=2)
+        current_word = ""
+    except:
+        pass
+
+    # print(f"[KEY COUNT] {key_count} / {trigger_limit}")
 
     stats["total_keys"] += 1
     with open(STATS_FILE, "w") as f:
