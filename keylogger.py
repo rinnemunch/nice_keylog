@@ -57,6 +57,12 @@ def play_sound():
     except Exception as e:
         print(Fore.RED + f"[Sound Error] {e}" + Style.RESET_ALL)
 
+def get_keys_per_minute():
+    now = time.time()
+    one_minute_ago = now - 60
+
+    recent = [t for t in recent_keys if t >= one_minute_ago]
+    return len(recent)
 
 def animate_text(text, delay=0.05, color=Fore.CYAN):
     lines = text.splitlines()
