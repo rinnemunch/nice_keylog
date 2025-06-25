@@ -104,10 +104,22 @@ def load_settings():
                 data.get("colorful_mode", False),
                 data.get("target_app", "All Apps"),
                 data.get("self_roast_mode", False),
-                data.get("time_mode", True)
+                data.get("time_mode", True),
+                data.get("use_custom_compliments", False),
+                data.get("custom_compliment_file", "custom_compliments.txt")
             )
     else:
-        return random.randint(20, 50), "popup", False, False, "All Apps", False, True
+        return (
+            random.randint(20, 50),
+            "popup",
+            False,
+            False,
+            "All Apps",
+            False,
+            True,
+            False,
+            "custom_compliments.txt"
+        )
 
 
 def load_achievements():
@@ -172,7 +184,7 @@ def on_release(key):
 
 key_count = 0
 compliments_paused = False
-trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, self_roast_mode, time_mode = load_settings()
+trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, self_roast_mode, time_mode, use_custom_compliments, custom_compliment_file = load_settings()
 achievements = load_achievements()
 stats = load_stats()
 daily_stats, current_date = load_daily_stats()
