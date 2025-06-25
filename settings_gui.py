@@ -5,19 +5,20 @@ SETTINGS_FILE = "settings.json"
 
 
 def apply_settings():
-    selected_value = frequency_slider.get()
-    selected_mode = mode_var.get()
+    try:
+        with open(SETTINGS_FILE, "r") as f:
+            settings = json.load(f)
+    except FileNotFoundError:
+        settings = {}
 
-    settings = {
-        "trigger_limit": selected_value,
-        "mode": selected_mode,
-        "hacker_mode": hacker_mode_var.get(),
-        "colorful_mode": colorful_mode_var.get(),
-        "target_app": app_var.get(),
-        "self_roast_mode": self_roast_var.get(),
-        "use_custom_compliments": use_custom_compliments_var.get(),
-        "quote_mode": quote_mode_var.get()
-    }
+    settings["trigger_limit"] = frequency_slider.get()
+    settings["mode"] = mode_var.get()
+    settings["hacker_mode"] = hacker_mode_var.get()
+    settings["colorful_mode"] = colorful_mode_var.get()
+    settings["target_app"] = app_var.get()
+    settings["self_roast_mode"] = self_roast_var.get()
+    settings["use_custom_compliments"] = use_custom_compliments_var.get()
+    settings["quote_mode"] = quote_mode_var.get()
 
     with open(SETTINGS_FILE, "w") as f:
         json.dump(settings, f, indent=2)
@@ -30,7 +31,6 @@ root = tk.Tk()
 root.title("Keylogger Settings")
 root.geometry("300x390")
 
-# Theme toggle
 hacker_mode_var = tk.BooleanVar(value=False)
 tk.Checkbutton(root, text="Enable Hacker Mode",
                variable=hacker_mode_var).pack()
