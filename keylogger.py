@@ -302,8 +302,8 @@ def on_press(key):
     ):
         compliments_paused = not compliments_paused
         state = "paused" if compliments_paused else "resumed"
-        # print(Fore.CYAN + f"⏸️ Compliments {state}." + Style.RESET_ALL)
-        # return
+        print(Fore.CYAN + f"⏸️ Compliments {state}." + Style.RESET_ALL)
+        return
 
     try:
         active_title = gw.getActiveWindowTitle()
@@ -313,6 +313,23 @@ def on_press(key):
     if target_app != "All Apps":
         if not active_title or target_app.lower() not in active_title.lower():
             return
+
+    # Ctrl + Shift + H to show histroy log
+    if "ctrl" in pressed_keys and "shift" in pressed_keys:
+        vk = getattr(key, "vk", None)
+        if vk == ord("H"):
+            try:
+                with open("compliment_history.log", "r", encoding="utf-8") as f:
+                    lines = f.read().splitlines()
+                last5 = "\n".join(lines[-5:])
+                if compliment_mode == "popup":
+                    show_popup(last5)
+                else:
+                    print(Fore.CYAN + last5 + Style.RESET_ALL)
+            except FileNotFoundError:
+                print(
+                    Fore.RED + "[LOG ERROR] No history file found." + Style.RESET_ALL)
+        return
 
     key_count += 1
 
