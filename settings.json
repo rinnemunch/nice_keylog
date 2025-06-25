@@ -6,5 +6,7 @@
   "target_app": "Notepad",
   "self_roast_mode": false,
   "use_custom_compliments": true,
-  "custom_compliment_file": "custom_compliments.txt"
+  "custom_compliment_file": "custom_compliments.txt",
+  "use_compliment_api": true,
+  "compliment_api_url": "https://complimentr.com/api"
 }
