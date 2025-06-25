@@ -416,6 +416,10 @@ def on_press(key):
                 color=random.choice(colors)
             )
 
+        timestamp = datetime.now().isoformat()
+        with open("compliment_history.log", "a", encoding="utf-8") as log:
+            log.write(f"{timestamp} | {compliment}\n")
+
         key_count = 0
 
 
