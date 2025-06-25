@@ -12,6 +12,10 @@ from datetime import datetime
 import pygame
 import time
 import sys
+from collections import deque
+
+recent_keys = deque(maxlen=100)
+start_time = time.time()
 
 SETTINGS_FILE = "settings.json"
 ACHIEVEMENTS_FILE = "achievements.json"
