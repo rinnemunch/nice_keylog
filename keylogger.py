@@ -204,7 +204,7 @@ def get_time_based_compliment(roast_mode=False):
             return "🌙 Late night legend at work."
 
 def on_press(key):
-    global key_count, trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, compliments_paused, self_roast_mode, time_mode, current_date
+    global key_count, trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, compliments_paused, self_roast_mode, time_mode, current_date, current_word, word_stats
 
     new_date = datetime.now().strftime("%Y-%m-%d")
     if new_date != current_date:
@@ -248,14 +248,17 @@ def on_press(key):
     try:
         if hasattr(key, 'char') and key.char.isalnum():
             current_word += key.char.lower()
-        elif key == keyboard.Key.space or key == keyboard.Key.enter:
+        elif key in (keyboard.Key.space, keyboard.Key.enter):
+            print(f"[DEBUG] Word completed: '{current_word}'")
             if 2 < len(current_word) < 20 and current_word not in ["the", "and", "for"]:
                 word_stats[current_word] = word_stats.get(current_word, 0) + 1
                 with open(WORD_STATS_FILE, "w") as f:
                     json.dump(word_stats, f, indent=2)
-        current_word = ""
+                print(f"[DEBUG] Logged '{current_word}' → count {word_stats[current_word]}")
+            current_word = ""
     except:
         pass
+
 
     # print(f"[KEY COUNT] {key_count} / {trigger_limit}")
 
