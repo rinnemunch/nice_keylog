@@ -10,6 +10,7 @@ import os
 from pynput import keyboard
 from plyer import notification
 from pyfiglet import Figlet
+import requests
 from colorama import init, Fore, Style
 init()
 colors = [Fore.RED, Fore.BLUE, Fore.YELLOW,
@@ -66,6 +67,17 @@ def get_keys_per_minute():
 
     recent = [t for t in recent_keys if t >= one_minute_ago]
     return len(recent)
+
+
+def get_api_compliment():
+    try:
+        response = requests.get(compliment_api_url, timeout=5)
+        if response.status_code == 200:
+            data = response.json()
+            return data.get("compliment", "").strip()
+    except Exception as e:
+        print(Fore.RED + f"[API ERROR] {e}" + Style.RESET_ALL)
+    return None
 
 
 def animate_text(text, delay=0.05, color=Fore.CYAN):
@@ -347,6 +359,16 @@ def on_press(key):
 
         if stats["streak"] == 5:
             unlock_achievement("Compliment Combo")
+
+        if use_compliment_api and not self_roast_mode:
+            api_compliment = get_api_compliment()
+            if api_compliment:
+                compliment = api_compliment
+            else:
+                compliment = random.choice(compliments)
+        else:
+            compliment = random.choice(
+                roasts if self_roast_mode else compliments)
 
         if self_roast_mode:
             if kpm < 20:
