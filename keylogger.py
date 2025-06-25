@@ -106,7 +106,9 @@ def load_settings():
                 data.get("self_roast_mode", False),
                 data.get("time_mode", True),
                 data.get("use_custom_compliments", False),
-                data.get("custom_compliment_file", "custom_compliments.txt")
+                data.get("custom_compliment_file", "custom_compliments.txt"),
+                data.get("use_compliment_api", False),
+                data.get("compliment_api_url", "https://complimentr.com/api")
             )
     else:
         return (
@@ -118,7 +120,9 @@ def load_settings():
             False,
             True,
             False,
-            "custom_compliments.txt"
+            "custom_compliments.txt",
+            False,
+            "https://complimentr.com/api"
         )
 
 
@@ -184,7 +188,7 @@ def on_release(key):
 
 key_count = 0
 compliments_paused = False
-trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, self_roast_mode, time_mode, use_custom_compliments, custom_compliment_file = load_settings()
+trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, self_roast_mode, time_mode, use_custom_compliments, custom_compliment_file, use_compliment_api, compliment_api_url = load_settings()
 achievements = load_achievements()
 stats = load_stats()
 daily_stats, current_date = load_daily_stats()
