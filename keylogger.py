@@ -12,6 +12,8 @@ from plyer import notification
 from pyfiglet import Figlet
 import requests
 from colorama import init, Fore, Style
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 init()
 colors = [Fore.RED, Fore.BLUE, Fore.YELLOW,
           Fore.CYAN, Fore.MAGENTA, Fore.WHITE]
