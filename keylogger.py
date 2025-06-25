@@ -69,15 +69,14 @@ def get_keys_per_minute():
     return len(recent)
 
 
-def get_api_compliment():
+def get_compliment():
     try:
-        response = requests.get(compliment_api_url, timeout=5)
-        if response.status_code == 200:
-            data = response.json()
-            return data.get("compliment", "").strip()
+        r = requests.get("https://api.quotable.io/random", verify=False)
+        data = r.json()
+        return f'"{data["content"]}" — {data["author"]}'
     except Exception as e:
-        print(Fore.RED + f"[API ERROR] {e}" + Style.RESET_ALL)
-    return None
+        print("[API ERROR]", e)
+        return None
 
 
 def animate_text(text, delay=0.05, color=Fore.CYAN):
@@ -361,7 +360,9 @@ def on_press(key):
             unlock_achievement("Compliment Combo")
 
         if use_compliment_api and not self_roast_mode:
-            api_compliment = get_api_compliment()
+            api_compliment = get_compliment()
+            print(Fore.CYAN +
+                  f"[API COMPLIMENT] {api_compliment}" + Style.RESET_ALL)
             if api_compliment:
                 compliment = api_compliment
             else:

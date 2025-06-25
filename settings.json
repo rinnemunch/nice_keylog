@@ -8,5 +8,5 @@
   "use_custom_compliments": true,
   "custom_compliment_file": "custom_compliments.txt",
   "use_compliment_api": true,
-  "compliment_api_url": "https://complimentr.com/api"
+  "compliment_api_url": "https://api.quotable.io/random"
 }
