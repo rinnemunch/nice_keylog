@@ -19,6 +19,7 @@ colors = [Fore.RED, Fore.BLUE, Fore.YELLOW,
 recent_keys = deque(maxlen=100)
 start_time = time.time()
 
+
 SETTINGS_FILE = "settings.json"
 ACHIEVEMENTS_FILE = "achievements.json"
 STATS_FILE = "stats.json"
@@ -71,11 +72,11 @@ def get_keys_per_minute():
 
 def get_compliment():
     try:
-        r = requests.get("https://api.quotable.io/random", verify=False)
+        r = requests.get(compliment_api_url, verify=False)
         data = r.json()
         return f'"{data["content"]}" — {data["author"]}'
     except Exception as e:
-        print("[API ERROR]", e)
+        print("[QUOTE API ERROR]", e)
         return None
 
 
@@ -119,7 +120,8 @@ def load_settings():
                 data.get("use_custom_compliments", False),
                 data.get("custom_compliment_file", "custom_compliments.txt"),
                 data.get("use_compliment_api", False),
-                data.get("compliment_api_url", "https://complimentr.com/api")
+                data.get("compliment_api_url", "https://complimentr.com/api"),
+                data.get("quote_mode", False)
             )
     else:
         return (
@@ -133,7 +135,8 @@ def load_settings():
             False,
             "custom_compliments.txt",
             False,
-            "https://complimentr.com/api"
+            "https://complimentr.com/api",
+            False
         )
 
 
@@ -199,11 +202,12 @@ def on_release(key):
 
 key_count = 0
 compliments_paused = False
-trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, self_roast_mode, time_mode, use_custom_compliments, custom_compliment_file, use_compliment_api, compliment_api_url = load_settings()
+trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, self_roast_mode, time_mode, use_custom_compliments, custom_compliment_file, use_compliment_api, compliment_api_url, quote_mode = load_settings()
 achievements = load_achievements()
 stats = load_stats()
 daily_stats, current_date = load_daily_stats()
 pressed_keys = set()
+
 
 current_word = ""
 word_stats = {}
@@ -265,7 +269,10 @@ def get_time_based_compliment(roast_mode=False):
 
 
 def on_press(key):
-    global key_count, trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, compliments_paused, self_roast_mode, time_mode, current_date, current_word, word_stats
+    global key_count, compliments_paused, current_word, current_date
+    global trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app
+    global self_roast_mode, time_mode, use_custom_compliments, custom_compliment_file
+    global use_compliment_api, compliment_api_url, quote_mode
 
     new_date = datetime.now().strftime("%Y-%m-%d")
     if new_date != current_date:
@@ -359,17 +366,20 @@ def on_press(key):
         if stats["streak"] == 5:
             unlock_achievement("Compliment Combo")
 
-        if use_compliment_api and not self_roast_mode:
+        if self_roast_mode:
+            compliment = random.choice(roasts)
+        elif quote_mode:
+            quote = get_compliment()
+            print(Fore.CYAN + f"[QUOTE MODE] {quote}" + Style.RESET_ALL)
+            compliment = quote if quote else random.choice(compliments)
+        elif use_compliment_api:
             api_compliment = get_compliment()
             print(Fore.CYAN +
                   f"[API COMPLIMENT] {api_compliment}" + Style.RESET_ALL)
-            if api_compliment:
-                compliment = api_compliment
-            else:
-                compliment = random.choice(compliments)
+            compliment = api_compliment if api_compliment else random.choice(
+                compliments)
         else:
-            compliment = random.choice(
-                roasts if self_roast_mode else compliments)
+            compliment = random.choice(compliments)
 
         if self_roast_mode:
             if kpm < 20:
@@ -390,8 +400,8 @@ def on_press(key):
 
         if time_mode and random.random() < 0.5:
             compliment += f"\n{get_time_based_compliment(self_roast_mode)}"
-            print(Fore.MAGENTA +
-                  "[🕒 Time-based compliment triggered]" + Style.RESET_ALL)
+            # print(Fore.MAGENTA +
+            #       "[🕒 Time-based compliment triggered]" + Style.RESET_ALL)
 
         play_sound()
 
@@ -405,10 +415,28 @@ def on_press(key):
             )
 
         key_count = 0
-        # trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, self_roast_mode, time_mode = load_settings()
 
 
 def main():
+    global trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app
+    global self_roast_mode, time_mode, use_custom_compliments, custom_compliment_file
+    global use_compliment_api, compliment_api_url, quote_mode
+
+    (
+        trigger_limit,
+        compliment_mode,
+        hacker_mode,
+        colorful_mode,
+        target_app,
+        self_roast_mode,
+        time_mode,
+        use_custom_compliments,
+        custom_compliment_file,
+        use_compliment_api,
+        compliment_api_url,
+        quote_mode
+    ) = load_settings()
+
     with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
         listener.join()
 

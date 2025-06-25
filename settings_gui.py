@@ -15,7 +15,8 @@ def apply_settings():
         "colorful_mode": colorful_mode_var.get(),
         "target_app": app_var.get(),
         "self_roast_mode": self_roast_var.get(),
-        "use_custom_compliments": use_custom_compliments_var.get()
+        "use_custom_compliments": use_custom_compliments_var.get(),
+        "quote_mode": quote_mode_var.get()
     }
 
     with open(SETTINGS_FILE, "w") as f:
@@ -45,6 +46,10 @@ tk.Checkbutton(root, text="Enable Self-Roast Mode",
 use_custom_compliments_var = tk.BooleanVar(value=False)
 tk.Checkbutton(root, text="Use Custom Compliment File",
                variable=use_custom_compliments_var).pack()
+
+quote_mode_var = tk.BooleanVar(value=False)
+tk.Checkbutton(root, text="Use Online Quotes Instead of Compliments",
+               variable=quote_mode_var).pack()
 
 label = tk.Label(root, text="Compliment Frequency (keystrokes):")
 label.pack(pady=10)
