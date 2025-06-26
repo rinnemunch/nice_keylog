@@ -30,7 +30,7 @@ def apply_settings():
 # GUI
 root = tk.Tk()
 root.title("Keylogger Settings")
-root.geometry("300x390")
+root.geometry("600x600")
 
 autostart_var = tk.BooleanVar(value=False)
 tk.Checkbutton(root, text="Start on Boot", variable=autostart_var).pack()

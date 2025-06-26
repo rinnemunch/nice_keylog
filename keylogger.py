@@ -14,6 +14,8 @@ import requests
 from colorama import init, Fore, Style
 import urllib3
 import threading
+import shutil
+import winreg
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 init()
 colors = [Fore.RED, Fore.BLUE, Fore.YELLOW,
@@ -63,6 +65,33 @@ def play_sound():
         pygame.mixer.Sound("chime.wav").play()
     except Exception as e:
         print(Fore.RED + f"[Sound Error] {e}" + Style.RESET_ALL)
+
+
+def enable_autostart():
+    exe_path = sys.executable
+    reg_path = r"Software\Microsoft\Windows\CurrentVersion\Run"
+    key_name = "NiceKeylogger"
+
+    try:
+        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, reg_path, 0, winreg.KEY_SET_VALUE) as key:
+            winreg.SetValueEx(key, key_name, 0, winreg.REG_SZ, exe_path)
+            print("[BOOT] Auto-start enabled.")
+    except Exception as e:
+        print(f"[BOOT ERROR] {e}")
+
+
+def disable_autostart():
+    reg_path = r"Software\Microsoft\Windows\CurrentVersion\Run"
+    key_name = "NiceKeylogger"
+
+    try:
+        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, reg_path, 0, winreg.KEY_ALL_ACCESS) as key:
+            winreg.DeleteValue(key, key_name)
+            print("[BOOT] Auto-start disabled.")
+    except FileNotFoundError:
+        print("[BOOT] No startup entry to remove.")
+    except Exception as e:
+        print(f"[BOOT ERROR] {e}")
 
 
 def get_keys_per_minute():
@@ -519,6 +548,13 @@ def main():
         compliment_api_url,
         quote_mode
     ) = load_settings()
+
+    with open("settings.json", "r") as f:
+        settings = json.load(f)
+        if settings.get("autostart"):
+            enable_autostart()
+        else:
+            disable_autostart()
 
     with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
         listener.join()
