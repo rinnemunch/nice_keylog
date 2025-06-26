@@ -19,6 +19,7 @@ def apply_settings():
     settings["self_roast_mode"] = self_roast_var.get()
     settings["use_custom_compliments"] = use_custom_compliments_var.get()
     settings["quote_mode"] = quote_mode_var.get()
+    settings["autostart"] = autostart_var.get()
 
     with open(SETTINGS_FILE, "w") as f:
         json.dump(settings, f, indent=2)
@@ -30,6 +31,9 @@ def apply_settings():
 root = tk.Tk()
 root.title("Keylogger Settings")
 root.geometry("300x390")
+
+autostart_var = tk.BooleanVar(value=False)
+tk.Checkbutton(root, text="Start on Boot", variable=autostart_var).pack()
 
 hacker_mode_var = tk.BooleanVar(value=False)
 tk.Checkbutton(root, text="Enable Hacker Mode",
