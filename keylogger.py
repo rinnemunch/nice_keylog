@@ -72,6 +72,17 @@ def get_keys_per_minute():
     return len(recent)
 
 
+def detect_mood(kpm, idle_duration, backspace_count):
+    if backspace_count >= 5:
+        return "frustrated"
+    elif kpm >= 100 and idle_duration < 1:
+        return "hyper"
+    elif kpm < 20 and idle_duration > 5:
+        return "tired"
+    else:
+        return "calm"
+
+
 def get_compliment():
     try:
         r = requests.get(compliment_api_url, verify=False)
@@ -410,6 +421,9 @@ def on_press(key):
 
         if stats["streak"] == 5:
             unlock_achievement("Compliment Combo")
+
+        mood = detect_mood(kpm, idle_duration, backspace_count)
+        print(f"[DEBUG] Mood detected: {mood}")
 
         if self_roast_mode:
             compliment = random.choice(roasts)
