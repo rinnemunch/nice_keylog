@@ -206,6 +206,8 @@ key_count = 0
 compliments_paused = False
 backspace_count = 0
 last_backspace_time = time.time()
+last_keypress_time = time.time()
+idle_duration = 0
 
 trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, self_roast_mode, time_mode, use_custom_compliments, custom_compliment_file, use_compliment_api, compliment_api_url, quote_mode = load_settings()
 achievements = load_achievements()
@@ -345,6 +347,10 @@ def on_press(key):
 
     recent_keys.append(time.time())
     kpm = get_keys_per_minute()
+
+    now = time.time()
+    idle_duration = now - last_keypress_time
+    last_keypress_time = now
 
     try:
         if hasattr(key, 'char') and key.char.isalnum():
