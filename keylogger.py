@@ -16,6 +16,7 @@ import urllib3
 import threading
 import shutil
 import winreg
+import pyttsx3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 init()
 colors = [Fore.RED, Fore.BLUE, Fore.YELLOW,
@@ -94,6 +95,12 @@ def disable_autostart():
         print(f"[BOOT ERROR] {e}")
 
 
+def speak(text):
+    engine = pyttsx3.init()
+    engine.say(text)
+    engine.runAndWait()
+
+
 def get_keys_per_minute():
     now = time.time()
     one_minute_ago = now - 60
@@ -164,7 +171,8 @@ def load_settings():
                 data.get("custom_compliment_file", "custom_compliments.txt"),
                 data.get("use_compliment_api", False),
                 data.get("compliment_api_url", "https://complimentr.com/api"),
-                data.get("quote_mode", False)
+                data.get("quote_mode", False),
+                data.get("speak_compliment", False)
             )
     else:
         return (
@@ -179,6 +187,7 @@ def load_settings():
             "custom_compliments.txt",
             False,
             "https://complimentr.com/api",
+            False,
             False
         )
 
@@ -250,7 +259,9 @@ last_backspace_time = time.time()
 last_keypress_time = time.time()
 idle_duration = 0
 
-trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, self_roast_mode, time_mode, use_custom_compliments, custom_compliment_file, use_compliment_api, compliment_api_url, quote_mode = load_settings()
+trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, \
+    self_roast_mode, time_mode, use_custom_compliments, custom_compliment_file, \
+    use_compliment_api, compliment_api_url, quote_mode, speak_compliment = load_settings()
 achievements = load_achievements()
 stats = load_stats()
 daily_stats, current_date = load_daily_stats()
@@ -323,6 +334,7 @@ def on_press(key):
     global last_keypress_time
     global backspace_count
     global last_backspace_time
+    global speak_compliment
 
     new_date = datetime.now().strftime("%Y-%m-%d")
     if new_date != current_date:
@@ -511,6 +523,9 @@ def on_press(key):
 
         def delayed_compliment_show():
             time.sleep(random.uniform(1, 1))
+            if speak_compliment:
+                threading.Thread(target=speak, args=(compliment,)).start()
+
             if compliment_mode == "popup":
                 show_popup(compliment)
             else:
@@ -546,7 +561,8 @@ def main():
         custom_compliment_file,
         use_compliment_api,
         compliment_api_url,
-        quote_mode
+        quote_mode,
+        speak_compliment
     ) = load_settings()
 
     with open("settings.json", "r") as f:

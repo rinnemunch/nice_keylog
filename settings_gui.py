@@ -20,6 +20,7 @@ def apply_settings():
     settings["use_custom_compliments"] = use_custom_compliments_var.get()
     settings["quote_mode"] = quote_mode_var.get()
     settings["autostart"] = autostart_var.get()
+    settings["speak_compliment"] = speak_compliment_var.get()
 
     with open(SETTINGS_FILE, "w") as f:
         json.dump(settings, f, indent=2)
@@ -34,6 +35,10 @@ root.geometry("600x600")
 
 autostart_var = tk.BooleanVar(value=False)
 tk.Checkbutton(root, text="Start on Boot", variable=autostart_var).pack()
+
+speak_compliment_var = tk.BooleanVar(value=False)
+tk.Checkbutton(root, text="Speak Compliments Out Loud",
+               variable=speak_compliment_var).pack()
 
 hacker_mode_var = tk.BooleanVar(value=False)
 tk.Checkbutton(root, text="Enable Hacker Mode",

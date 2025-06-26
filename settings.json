@@ -1,11 +1,13 @@
 {
   "trigger_limit": 30,
-  "mode": "terminal",
+  "mode": "popup",
   "hacker_mode": false,
   "colorful_mode": false,
   "target_app": "Notepad",
-  "self_roast_mode": true,
+  "self_roast_mode": false,
   "use_custom_compliments": false,
   "quote_mode": false,
-  "compliment_api_url": "https://api.quotable.io/random"
+  "compliment_api_url": "https://api.quotable.io/random",
+  "autostart": false,
+  "speak_compliment": true
 }
