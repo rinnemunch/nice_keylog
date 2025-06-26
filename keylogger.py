@@ -204,12 +204,14 @@ def on_release(key):
 
 key_count = 0
 compliments_paused = False
+backspace_count = 0
+last_backspace_time = time.time()
+
 trigger_limit, compliment_mode, hacker_mode, colorful_mode, target_app, self_roast_mode, time_mode, use_custom_compliments, custom_compliment_file, use_compliment_api, compliment_api_url, quote_mode = load_settings()
 achievements = load_achievements()
 stats = load_stats()
 daily_stats, current_date = load_daily_stats()
 pressed_keys = set()
-
 
 current_word = ""
 word_stats = {}
@@ -332,6 +334,14 @@ def on_press(key):
         return
 
     key_count += 1
+
+    if key == keyboard.Key.backspace:
+        now = time.time()
+        if now - last_backspace_time < 5:
+            backspace_count += 1
+    else:
+        backspace_count = 1
+    last_backspace_time = now
 
     recent_keys.append(time.time())
     kpm = get_keys_per_minute()
