@@ -368,6 +368,16 @@ def on_press(key):
     with open(STATS_FILE, "w") as f:
         json.dump(stats, f, indent=2)
 
+        # ADAPTIVE FREQUENCY LOGIC
+    if kpm >= 100:
+        dynamic_trigger = int(trigger_limit * 1.8)
+    elif kpm >= 70:
+        dynamic_trigger = int(trigger_limit * 1.5)
+    elif kpm >= 40:
+        dynamic_trigger = int(trigger_limit * 1.2)
+    else:
+        dynamic_trigger = trigger_limit
+
     if key_count >= trigger_limit:
         if compliments_paused or (target_app != "All Apps" and (not active_title or target_app.lower() not in active_title.lower())):
             if stats["streak"] > 0:
