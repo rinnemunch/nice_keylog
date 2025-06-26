@@ -13,6 +13,7 @@ from pyfiglet import Figlet
 import requests
 from colorama import init, Fore, Style
 import urllib3
+import threading
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 init()
 colors = [Fore.RED, Fore.BLUE, Fore.YELLOW,
@@ -479,14 +480,18 @@ def on_press(key):
 
         play_sound()
 
-        if compliment_mode == "popup":
-            show_popup(compliment)
-        else:
-            animate_figlet(
-                compliment,
-                delay=0.05,
-                color=random.choice(colors)
-            )
+        def delayed_compliment_show():
+            time.sleep(random.uniform(1, 3))
+            if compliment_mode == "popup":
+                show_popup(compliment)
+            else:
+                animate_figlet(
+                    compliment,
+                    delay=0.05,
+                    color=random.choice(colors)
+                )
+
+        threading.Thread(target=delayed_compliment_show).start()
 
         timestamp = datetime.now().isoformat()
         with open("compliment_history.log", "a", encoding="utf-8") as log:
