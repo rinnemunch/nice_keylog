@@ -378,7 +378,7 @@ def on_press(key):
     else:
         dynamic_trigger = trigger_limit
 
-    if key_count >= trigger_limit:
+    if key_count >= dynamic_trigger:
         if compliments_paused or (target_app != "All Apps" and (not active_title or target_app.lower() not in active_title.lower())):
             if stats["streak"] > 0:
                 print(
