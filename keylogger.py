@@ -425,9 +425,15 @@ def on_press(key):
         mood = detect_mood(kpm, idle_duration, backspace_count)
         print(f"[DEBUG] Mood detected: {mood}")
 
-        if self_roast_mode:
+    if self_roast_mode:
+        if mood == "frustrated":
+            compliment = "😤 Don’t throw the keyboard, champ. You got this."
+        elif mood == "tired":
+            compliment = "😴 Maybe a stretch break? You’re still a beast."
+        else:
             compliment = random.choice(roasts)
-        elif quote_mode:
+    else:
+        if quote_mode:
             quote = get_compliment()
             print(Fore.CYAN + f"[QUOTE MODE] {quote}" + Style.RESET_ALL)
             compliment = quote if quote else random.choice(compliments)
@@ -437,6 +443,12 @@ def on_press(key):
                   f"[API COMPLIMENT] {api_compliment}" + Style.RESET_ALL)
             compliment = api_compliment if api_compliment else random.choice(
                 compliments)
+        elif mood == "frustrated":
+            compliment = "🧠 Even pros hit bumps. You're still killing it."
+        elif mood == "tired":
+            compliment = "☕ Hang in there. Even slow code moves forward."
+        elif mood == "hyper":
+            compliment = "💥 Your keyboard can't keep up with you!"
         else:
             compliment = random.choice(compliments)
 
