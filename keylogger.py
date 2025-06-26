@@ -481,7 +481,7 @@ def on_press(key):
         play_sound()
 
         def delayed_compliment_show():
-            time.sleep(random.uniform(1, 3))
+            time.sleep(random.uniform(1, 1))
             if compliment_mode == "popup":
                 show_popup(compliment)
             else:
